@@ -1,0 +1,91 @@
+
+sudoku_board = [
+    [0,6,0,0,0,0],
+    [0,0,0,6,2,4],
+    [3,0,4,0,1,0],
+    [0,0,0,2,0,0],
+    [0,0,0,4,5,0],
+    [0,0,1,0,0,2]
+]
+boad_size= 6
+
+def print_sudoku():              #this is a function to print sudoku
+    for i in sudoku_board:   #here i'm just making a simple function of the unorganized list so i can call it in the end.
+        print(i)
+
+def board_arrangement(sudoku_board):   #this function will organize the board. The board needs to contain boxes of 2 rows by 3 columns
+    for r in range(len(sudoku_board)):   #to make it easy i name the row r, and here i'm dividing 6(the board) by 2 which is going to give us three different "row compatrments"
+        if r % 2 == 0 and r != 0:
+            print("- - - - - - - - ")  #to make it tidy, i'm puting lines as division
+
+        for c in range(len(sudoku_board[0])):       #same thing here, instead of the rows now i'm dividing the columns, putin | every third column (basically just in the middle)
+            if c % 3 == 0 and c != 0:
+                print(" | ", end="")
+
+            if c == 5:      #this checks if it got to the last position
+                print(sudoku_board[r][c])
+            else:
+                print(str(sudoku_board[r][c]) + " ", end="")
+
+
+
+def finding_empty_spots(row, column):   #this function  finds the zeros (aka the empty positions)
+    num=0
+    for r in range(0, boad_size):       #checks the rows
+        for c in range(0, boad_size):   #checks the columns
+            if sudoku_board[r][c] == 0:
+                row = r
+                column = c
+                num = 1
+                x = [row, column, num]
+                return x
+    x = [-1, -1, num]
+    return x
+
+def solve(n, r, c):                 #this function checks if we can put the r and c values in the n cell.
+    for i in range(0, boad_size):
+        if sudoku_board[r][i] == n: #i'm checking all the cells in the row "r" that have any "n" values.
+            return False
+    for i in range(0,boad_size):
+        if sudoku_board[i][c] == n:             #same thing, checking to see if there's any "c" value in the "n" cell (for columns).
+            return False
+    row_start = (r//3)*3    #here i'm checking for the inner boxes, using some division.
+    column_start = (c//2)*2
+    for r in range(row_start, row_start+3):     #here i'm looping through all 6 elements in my box to be sure that there are no similar elements in the box.
+        for c in range(column_start, column_start+2):   #same but now for the colums
+            if sudoku_board[r][c] == n:     #if the number entered is aleadey existent in the box, return false.
+                 return False
+    return True
+
+def sudoku_solver(sudoku_board):    #this is the the solving function, and the backtracking.
+    row = 0
+    column = 0
+    x = finding_empty_spots(row, column)            #checks if there are any empty celles, or cells that haven't recieved a value yet. If there are any, it gives the position of it.
+    if x[2] == 0:       #this function indcates we've found the solution. If this is not the case, then finding_empty_spots is going to return a value which is going to be a row and a collumn
+        return True
+    row = x[0]
+    column = x[1]
+    for r in range(1,7):        #goes through all the values from 1 to 6
+        if solve(r, row, column):       #using this function that i have made before, i'm checking to see what value i can give to that cell. So if the code above returns any row and column that needs
+            sudoku_board[row][column] = r  #BACKTRACKING.  So if the code above returns a row and column value, that means that that value will be added to the board.
+            if sudoku_solver(sudoku_board):     #after finding all the values, this function continues into solving the rest of the sudoku puzzle.
+                    return True
+            sudoku_board[row][column]=0     #if the function above fails, then this loop will try another value to the cell.
+    return False
+
+#making it pretty
+print_sudoku()
+print(" ")
+print("This is the unorganized list")
+print("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨")
+print(" ")
+board_arrangement(sudoku_board)
+print(" ")
+print("This is the organized but not solved list  ")
+print("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨")
+print(" ")
+sudoku_solver(sudoku_board)
+board_arrangement(sudoku_board)
+print(" ")
+print("This is the organized and solved list ")
+print("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨")
