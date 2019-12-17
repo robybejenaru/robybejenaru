@@ -1,0 +1,23 @@
+import random
+
+def magic_8ball():
+    magic_ball=["It is certain", "Yes definitely", "You don’t want to know", "Ask me again later",
+             "It is unlikely", "Oh no, not again", "42", "That would be an ecumenical matter", \
+             "You, sir, are an idiot", "Ask me again later, I’m trying to sleep"]
+
+    if answer.lower() != "stop":
+        print(magic_ball[random.randint(0,(len(magic_ball)-1))])
+        print("I hope it helped")
+    else:
+        print("Have a nice day")
+
+
+question = input("Do you want to ask a question?")
+answer = input("What do you wish to ask the magic ball")
+
+if question.lower() == "yes":
+    magic_8ball()
+else:
+    print("Goodbye!")
+
+magic_8ball()
